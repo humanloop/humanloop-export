@@ -145,7 +145,7 @@ def main(
         )
 
 
-@logger.catch
+@logger.catch(reraise=True)
 def export_file_to_disk(file_dir: Path, file: "File", done_file: Path):
     write_file_to_disk(
         file_dir=file_dir,
