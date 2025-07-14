@@ -110,3 +110,18 @@ if __name__ == "__main__":
 ```
 
 This will skip any Files that have already been exported.
+
+## Importing data
+
+We also provide a script to import data, given a prior export.
+
+```bash
+uv run import.py
+```
+
+This will import the data into Humanloop.
+
+The script will create a new import directory in the `imports` directory, named with a timestamp.
+This new import directory will contain logs of the import process (in `import.log`).
+
+Humanloop will be populated with the Files and Versions from the export.
