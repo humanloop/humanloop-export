@@ -86,7 +86,6 @@ EXPORT_LOGS = os.getenv("EXPORT_LOGS", "").lower() == "true"
 # httpx otherwise defaults to 5s.
 LONG_REQUEST_TIMEOUT = 300
 
-
 def main(
     directory_id: str, export_dir: Path | None = None, max_workers: int | None = 8
 ):
@@ -112,6 +111,8 @@ def main(
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             future_to_file = {}
             for file in files:
+                # Add a small delay between file processing to prevent DDOS
+                time.sleep(0.5)  # 500ms delay between file processing
                 file_dir = get_file_dir(export_dir=export_dir, file_id=file["id"])
                 done_file = file_dir / ".done"
                 if done_file.exists():
@@ -471,6 +472,8 @@ def paginated_request(url: str, **kwargs) -> Generator[dict, None, None]:
                         page_records = response["records"]
                         if page_records:
                             any_records = True
+                            # Add a small delay between page processing to prevent DDOS
+                            time.sleep(0.1)  # 100ms delay between page processing
                             yield from page_records
                     except Exception as e:
                         logger.error(f"Error fetching page: {str(e)}")
